@@ -1,58 +1,56 @@
-femme(anne).
-femme(betty).
-femme(lisa).
-femme(sylvie).
-femme(eve).
-femme(julie).
-femme(valerie).
+% Couples
+couple(marc,anne).
+couple(luc,betty).
+couple(jules,lisa).
+couple(leon,sylvie).
+couple(loic,eve).
+couple(paul,julie).
 
-homme(marc).
-homme(luc).
-homme(jean).
-homme(jules).
-homme(leon).
-homme(loic).
-homme(gerard).
-homme(jacques).
-homme(herve).
-homme(paul).
+% Solo
+couple(jean,null).
+couple(gerard,null).
+couple(jacques,null).
+couple(herve,null).
+couple(null,valerie).
 
-mari_de(anne,marc).
-mari_de(betty,luc).
-mari_de(lisa,jules).
-mari_de(sylvie,leon).
-mari_de(eve,loic).
-mari_de(julie,paul).
+% Parent
+pere_de(jean,marc).
+pere_de(jules,marc).
+pere_de(leon,marc).
+pere_de(lisa,luc).
+pere_de(loic,luc).
+pere_de(gerard,luc).
+pere_de(jacques,jules).
+pere_de(herve,leon).
+pere_de(julie,leon).
+pere_de(paul,loic).
+pere_de(valerie,loic).
 
-femme_de(Mec,Femme) :-
-  mari_de(Femme,Mec).
+homme(X) :-
+  X \== null,couple(X,_).
+femme(X) :-
+  X \== null,couple(_,X).
 
-enfant_de(anne,jean).
-enfant_de(anne,jules).
-enfant_de(anne,leon).
-enfant_de(lisa,jacques).
-enfant_de(sylvie,herve).
-enfant_de(sylvie,julie).
-enfant_de(betty,lisa).
-enfant_de(betty,loic).
-enfant_de(betty,gerard).
-enfant_de(eve,paul).
-enfant_de(eve,valerie).
+mari_de(X,Y) :-
+  X \== null,Y \== null,couple(X,Y).
 
-enfant_de(Homme,Enfant) :-
-  femme_de(Homme,X),enfant_de(X,Enfant).
+femme_de(X,Y) :-
+  mari_de(Y,X).
 
-beaupere_de(Enfant,Homme) :-
-  homme(Homme),enfant_de(femme_de(Enfant),Homme).
-beaupere_de(Enfant,Homme) :-
-  homme(Homme),enfant_de(mari_de(Enfant),Homme).
+enfant_de(Pere,Enfant) :-
+  pere_de(Enfant,Pere).
+enfant_de(Mere,Enfant) :-
+  couple(Pere,Mere),pere_de(Enfant,Pere).
 
-bellemere_de(Enfant,Femme) :-
-  femme(Femme),enfant_de(femme_de(Enfant),Femme).
-bellemere_de(Enfant,Femme) :-
-  femme(Femme),enfant_de(mari_de(Enfant),Femme).
+beaupere_de(Homme,Beaupere) :-
+  couple(Homme,Femme),pere_de(Femme,Beaupere).
+beaupere_de(Femme,Beaupere) :-
+  couple(Homme,Femme),pere_de(Homme,Beaupere).
 
-ancetre_de(Enfant,Parent) :-
-  enfant_de(Parent,Enfant).
-ancetre_de(Enfant,Parent) :-
-  enfant_de(X,Enfant),ancetre_de(X,Parent).
+bellemere_de(Pers,Bellemere) :-
+  couple(Beaupere,Bellemere),beaupere_de(Pers,Beaupere).
+
+ancetre_de(Enfant,Ancetre) :-
+  enfant_de(Ancetre,Enfant).
+ancetre_de(Enfant,Ancetre) :-
+  enfant_de(Parent,Enfant),ancetre_de(Parent,Ancetre).
