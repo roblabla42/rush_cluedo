@@ -40,15 +40,15 @@ femme_de(X,Y) :-
 enfant_de(Pere,Enfant) :-
   pere_de(Enfant,Pere).
 enfant_de(Mere,Enfant) :-
-  couple(Pere,Mere),pere_de(Enfant,Pere).
+  mari_de(Mere,Pere),pere_de(Enfant,Pere).
 
 beaupere_de(Homme,Beaupere) :-
-  couple(Homme,Femme),pere_de(Femme,Beaupere).
+  femme_de(Homme,Femme),pere_de(Femme,Beaupere).
 beaupere_de(Femme,Beaupere) :-
-  couple(Homme,Femme),pere_de(Homme,Beaupere).
+  mari_de(Femme,Homme),pere_de(Homme,Beaupere).
 
 bellemere_de(Pers,Bellemere) :-
-  couple(Beaupere,Bellemere),beaupere_de(Pers,Beaupere).
+  mari_de(Bellemere,Beaupere),beaupere_de(Pers,Beaupere).
 
 ancetre_de(Enfant,Ancetre) :-
   enfant_de(Ancetre,Enfant).
