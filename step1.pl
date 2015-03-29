@@ -1,56 +1,58 @@
-% Couples
-couple(marc,anne).
-couple(luc,betty).
-couple(jules,lisa).
-couple(leon,sylvie).
-couple(loic,eve).
-couple(paul,julie).
+femme(anne).
+femme(lisa).
+femme(sylvie).
+femme(julie).
+femme(betty).
+femme(eve).
+femme(valerie).
 
-% Solo
-couple(jean,null).
-couple(gerard,null).
-couple(jacques,null).
-couple(herve,null).
-couple(null,valerie).
+homme(marc).
+homme(jean).
+homme(jules).
+homme(jacques).
+homme(leon).
+homme(herve).
+homme(paul).
+homme(luc).
+homme(loic).
+homme(gerard).
 
-% Parent
-pere_de(jean,marc).
-pere_de(jules,marc).
-pere_de(leon,marc).
-pere_de(lisa,luc).
-pere_de(loic,luc).
-pere_de(gerard,luc).
-pere_de(jacques,jules).
-pere_de(herve,leon).
-pere_de(julie,leon).
-pere_de(paul,loic).
-pere_de(valerie,loic).
+mari_de(anne,marc).
+mari_de(lisa,jules).
+mari_de(sylvie,leon).
+mari_de(julie,paul).
+mari_de(betty,luc).
+mari_de(eve,loic).
 
-homme(X) :-
-  X \== null,couple(X,_).
-femme(X) :-
-  X \== null,couple(_,X).
+femme_de(Homme,Femme) :-
+  mari_de(Femme,Homme).
 
-mari_de(X,Y) :-
-  X \== null,Y \== null,couple(X,Y).
-
-femme_de(X,Y) :-
-  mari_de(Y,X).
-
-enfant_de(Pere,Enfant) :-
-  pere_de(Enfant,Pere).
-enfant_de(Mere,Enfant) :-
-  mari_de(Mere,Pere),pere_de(Enfant,Pere).
-
-beaupere_de(Homme,Beaupere) :-
-  femme_de(Homme,Femme),pere_de(Femme,Beaupere).
 beaupere_de(Femme,Beaupere) :-
-  mari_de(Femme,Homme),pere_de(Homme,Beaupere).
+  mari_de(Femme,Homme),enfant_de(Beaupere,Homme),homme(Beaupere).
+beaupere_de(Homme,Beaupere) :-
+  femme_de(Homme,Femme),enfant_de(Beaupere,Femme),homme(Beaupere).
 
-bellemere_de(Pers,Bellemere) :-
-  mari_de(Bellemere,Beaupere),beaupere_de(Pers,Beaupere).
+bellemere_de(Homme,Bellemere) :-
+  femme_de(Homme,Femme),enfant_de(Bellemere,Femme),femme(Bellemere).
+  % Verifie que Beaupere est le beau-pere de Femme.
 
-ancetre_de(Enfant,Ancetre) :-
-  enfant_de(Ancetre,Enfant).
-ancetre_de(Enfant,Ancetre) :-
-  enfant_de(Parent,Enfant),ancetre_de(Parent,Ancetre).
+enfant_de(marc,jean).
+enfant_de(marc,jules).
+enfant_de(marc,leon).
+enfant_de(jules,jacques).
+enfant_de(luc,lisa).
+enfant_de(luc,loic).
+enfant_de(luc,gerard).
+enfant_de(leon,heve).
+enfant_de(leon,julie).
+enfant_de(loic,paul).
+enfant_de(loic,valerie).
+
+enfant_de(Mere,Enfant) :-
+  mari_de(Mere,Pere),
+  enfant_de(Pere,Enfant).
+
+ancetre_de(Enfant,Parent) :-
+  enfant_de(Parent,Enfant).
+ancetre_de(Enfant,Parent) :-
+  enfant_de(X,Enfant),ancetre_de(X,Parent).
